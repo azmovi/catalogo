@@ -3,5 +3,29 @@ name = "newbank"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = []
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.14.0",
+    "fastapi[standard]>=0.115.5",
+    "pyjwt>=2.10.1",
+    "sqlmodel>=0.0.22",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8.0",
+    "pytest-bdd>=8.0.0",
+]
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
