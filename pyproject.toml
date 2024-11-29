@@ -1,21 +1,31 @@
 [project]
-name = "newbank"
+name = "catalogo"
 version = "0.1.0"
-description = "Add your description here"
+description = "Catalogo de pessoas"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.14.0",
     "fastapi[standard]>=0.115.5",
+    "httpx>=0.28.0",
+    "mypy>=1.13.0",
     "pyjwt>=2.10.1",
+    "sqlalchemy>=2.0.36",
     "sqlmodel>=0.0.22",
 ]
 
-[dependency-groups]
-dev = [
+[tool.uv]
+dev-dependencies = [
     "ruff>=0.8.0",
     "pytest-bdd>=8.0.0",
+    "mypy>=1.13.0",
+    "pytest>=8.3.3",
+    "pytest-cov>=6.0.0",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = '.'
+
 
 [tool.ruff]
 line-length = 79
@@ -29,3 +39,12 @@ select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 preview = true
 quote-style = 'single'
 
+# [tool.uv.scripts]
+# lint = 'ruff check .; ruff check . --diff'
+# format = 'ruff check . --fix; ruff format .'
+# run = 'fastapi dev catalogo/app.py'
+# ptest = 'pytest -s -x --cov=catalogo'
+# cov = 'coverage html'
+#
+# [tool.uv.scripts.combos]
+# test = ['lint', 'ptest', 'cov']

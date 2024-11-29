@@ -1,6 +1,7 @@
-# NewBank
+# Catalogo
 
-- Api simples para transações financeiras
+- Api simples para verificar o catalogo de pessoas
+- Baseado nesse [repositório](https://github.com/zanfranceschi/rinha-de-backend-2023-q3/)
 
 ### Stack
 - fastapi
