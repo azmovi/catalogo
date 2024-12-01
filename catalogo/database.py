@@ -1,7 +1,8 @@
 from typing import Annotated
 
 from fastapi import Depends
-from sqlmodel import create_engine, Session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 sqlite_url = 'sqlite:///./db.sqlite3'
 engine = create_engine(sqlite_url)
