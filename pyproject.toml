@@ -3,15 +3,12 @@ name = "catalogo"
 version = "0.1.0"
 description = "Catalogo de pessoas"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
-    "alembic>=1.14.0",
     "fastapi[standard]>=0.115.5",
     "httpx>=0.28.0",
-    "mypy>=1.13.0",
-    "pyjwt>=2.10.1",
     "sqlalchemy>=2.0.36",
-    "sqlmodel>=0.0.22",
+    "alembic>=1.14.0",
 ]
 
 [tool.uv]
@@ -21,6 +18,9 @@ dev-dependencies = [
     "mypy>=1.13.0",
     "pytest>=8.3.3",
     "pytest-cov>=6.0.0",
+    "pytest-sugar>=1.0.0",
+    "faker>=33.1.0",
+    "factory-boy>=3.3.1",
 ]
 
 [tool.pytest.ini_options]
@@ -38,13 +38,3 @@ select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 [tool.ruff.format]
 preview = true
 quote-style = 'single'
-
-# [tool.uv.scripts]
-# lint = 'ruff check .; ruff check . --diff'
-# format = 'ruff check . --fix; ruff format .'
-# run = 'fastapi dev catalogo/app.py'
-# ptest = 'pytest -s -x --cov=catalogo'
-# cov = 'coverage html'
-#
-# [tool.uv.scripts.combos]
-# test = ['lint', 'ptest', 'cov']
