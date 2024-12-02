@@ -2,7 +2,7 @@ from random import randint
 
 import factory
 
-from catalogo.model import Person, Test
+from catalogo.model import Person
 
 
 class FactoryPerson(factory.alchemy.SQLAlchemyModelFactory):
@@ -13,11 +13,3 @@ class FactoryPerson(factory.alchemy.SQLAlchemyModelFactory):
     name = factory.Faker('name')
     birthday = factory.Faker('date')
     stack = factory.Faker('words', nb=randint(0, 10))
-
-
-class FactoryTest(factory.alchemy.SQLAlchemyModelFactory):
-    class Meta:  # type: ignore
-        model = Test 
-        sqlalchemy_session = None
-
-    id = factory.Faker('uuid4')

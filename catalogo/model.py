@@ -1,29 +1,30 @@
+from typing import Annotated
 import uuid
-from datetime import date
+from datetime import datetime
 
-from sqlalchemy import JSON, String
-from sqlalchemy.orm import Mapped, mapped_column, registry
+from pydantic import BeforeValidator
+from sqlalchemy import JSON, Column
+from sqlmodel import Field, SQLModel
 
-table_registry = registry()
-
-
-@table_registry.mapped_as_dataclass
-class Person:
-    __tablename__ = 'people'
-
-    id: Mapped[uuid.UUID] = mapped_column(
-        init=False, primary_key=True, default_factory=uuid.uuid4
-    )
-    nick: Mapped[str] = mapped_column(
-        String(32), unique=True, index=True, nullable=False
-    )
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
-    birthday: Mapped[str]
-    stack: Mapped[list[str] | None] = mapped_column(JSON)
+def validate_birthday(birthday: str, date_format: str = "%Y-%m-%d") -> str:
+    if not datetime.strptime(birthday, date_format):
+        raise ValueError('Invalid birthday')
+    return birthday
 
 
-@table_registry.mapped_as_dataclass
-class Test:
-    __tablename__ = 'tests'
+def validate_stack(stack: list[str], max_length=32) -> list[str]:
+    for tec in stack:
+        if len(tec) >= max_length:
+            raise ValueError('stack max length error')
+    return stack
 
-    id: Mapped[uuid.UUID] = mapped_column(init=False, primary_key=True, default_factory=uuid.uuid4)
+class SchemaPerson(SQLModel):
+    nick: str = Field(max_length=32, index=True)
+    name: str = Field(max_length=100)
+    birthday: Annotated[str, BeforeValidator(validate_birthday)]
+    stack: Annotated[
+        list[str] | None, BeforeValidator(validate_stack)
+    ] = Field(sa_column=Column(JSON))
+
+class Person(SchemaPerson, table=True):
+    id: uuid.UUID = Field(primary_key=True, default_factory=uuid.uuid4)

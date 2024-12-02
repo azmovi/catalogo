@@ -4,10 +4,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import create_engine
 from sqlalchemy.pool import StaticPool
+from sqlmodel import Session, SQLModel, create_engine
 
 from catalogo.app import app
 from catalogo.database import get_session
-from catalogo.model import table_registry
 
 @pytest.fixture(name='session')
 def session():
@@ -16,12 +16,12 @@ def session():
         connect_args={'check_same_thread': False},
         poolclass=StaticPool,
     )
-    table_registry.metadata.create_all(engine)
+    SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:
         yield session
 
-    table_registry.metadata.drop_all(engine)
+    SQLModel.metadata.drop_all(engine)
 
 
 @pytest.fixture(name='client')

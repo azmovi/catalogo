@@ -5,8 +5,7 @@ from sqlalchemy import String, cast, select
 from sqlalchemy.exc import IntegrityError
 
 from catalogo.database import SessionT
-from catalogo.model import Person
-from catalogo.schema import SchemaPerson, PublicPerson
+from catalogo.model import Person, SchemaPerson
 
 app = FastAPI()
 
@@ -15,9 +14,9 @@ app = FastAPI()
     '/people',
     summary='Create People',
     status_code=HTTPStatus.CREATED,
-    response_model=PublicPerson
+    response_model=Person
 )
-def create(person: SchemaPerson, session: SessionT) -> Person:
+def create(person: SchemaPerson, session: SessionT):
     stmt = select(Person).where(
         cast(Person.name, String) == person.name
     )
@@ -26,16 +25,10 @@ def create(person: SchemaPerson, session: SessionT) -> Person:
             status_code=HTTPStatus.CONFLICT, detail='nick alredy in database'
         )
     try:
-        person_db = Person(
-            nick=person.nick,
-            name=person.name,
-            birthday=person.birthday,
-            stack=person.stack
-        )
-        session.add(person_db)
+        session.add(person)
         session.commit()
-        session.refresh(person_db)
-        return person_db
+        session.refresh(person)
+        return person
 
     except IntegrityError:
         session.rollback()
