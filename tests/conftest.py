@@ -1,13 +1,14 @@
-import pytest
 import factory
+import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from sqlalchemy.engine import create_engine
+from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
 from catalogo.app import app
 from catalogo.database import get_session
 from catalogo.model import table_registry
+
 
 @pytest.fixture(name='session')
 def session():
@@ -40,4 +41,4 @@ def client(session):
 def configure_factories(session):
     factories = factory.alchemy.SQLAlchemyModelFactory.__subclasses__()
     for fac in factories:
-        fac._meta.sqlalchemy_session = session # type: ignore
+        fac._meta.sqlalchemy_session = session  # type: ignore

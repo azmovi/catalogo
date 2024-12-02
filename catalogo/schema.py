@@ -1,9 +1,8 @@
 import uuid
-from typing import Annotated
 from datetime import date
+from typing import Annotated
 
 from pydantic import BaseModel, BeforeValidator
-
 
 # def validate_birthday(birthday: str, date_format: str = "%Y-%m-%d") -> str:
 #     if not datetime.strptime(birthday, date_format):
@@ -28,5 +27,3 @@ class SchemaPerson(BaseModel):
 
 class PublicPerson(SchemaPerson):
     id: uuid.UUID
-
-

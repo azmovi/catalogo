@@ -2,7 +2,7 @@
 #
 # from fastapi.testclient import TestClient
 #
-# from tests.factories import FactoryPerson 
+# from tests.factories import FactoryPerson
 #
 # def test_factories(client):
 #     user = FactoryPerson()

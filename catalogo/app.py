@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from catalogo.database import SessionT
 from catalogo.model import Person
-from catalogo.schema import SchemaPerson, PublicPerson
+from catalogo.schema import PublicPerson, SchemaPerson
 
 app = FastAPI()
 
