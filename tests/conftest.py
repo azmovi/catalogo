@@ -8,6 +8,8 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from catalogo.app import app
 from catalogo.database import get_session
+from catalogo.model import Person
+from tests.factories import FactoryPerson
 
 @pytest.fixture(name='session')
 def session():
