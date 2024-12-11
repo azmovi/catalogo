@@ -1,10 +1,10 @@
 from typing import Annotated
 import uuid
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import BeforeValidator
-from sqlalchemy import JSON, Column, String
-from sqlmodel import Field, SQLModel
+from sqlalchemy import Column, String
+from sqlmodel import ARRAY, Field, SQLModel
 
 def validate_birthday(birthday: str, date_format: str = "%Y-%m-%d") -> str:
     if not datetime.strptime(birthday, date_format):
@@ -20,10 +20,9 @@ def validate_stack(stack: list[str], max_length=32) -> list[str]:
 
 class Person(SQLModel, table=True):
     id: uuid.UUID = Field(primary_key=True, default_factory=uuid.uuid4)
-    #nick: str = Field(max_length=32, index=True)
-    nick: str = Field(sa_column=Column(String(32), index=True))
-    name: str = Field(max_length=100)
-    birthday: Annotated[str, BeforeValidator(validate_birthday)]
+    nick: str = Field(sa_column=Column(String(32), index=True, nullable=False))
+    name: str = Field(max_length=100, nullable=False)
+    birthday: date = Field(nullable=False)
     stack: Annotated[
         list[str] | None, BeforeValidator(validate_stack)
-    ] = Field(sa_column=Column(JSON))
+    ] = Field(sa_column=Column(ARRAY(String)))

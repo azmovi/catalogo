@@ -3,21 +3,23 @@ import factory
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import create_engine
-from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
+from testcontainers.postgres import PostgresContainer
 
 from catalogo.app import app
-from catalogo.database import get_session
+from catalogo.database import get_session, database_url
 from catalogo.model import Person
 from tests.factories import FactoryPerson
 
-@pytest.fixture(name='session')
-def session():
-    engine = create_engine(
-        'sqlite:///:memory:',
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool,
-    )
+@pytest.fixture(scope='session')
+def engine():
+    with PostgresContainer('postgres:latest', driver='psycopg') as postgres:
+        _engine = create_engine(postgres.get_connection_url())
+        with _engine.begin():
+            yield _engine
+
+@pytest.fixture(scope='session')
+def session(engine):
     SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:

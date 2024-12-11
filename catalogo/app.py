@@ -2,7 +2,8 @@ from http import HTTPStatus
 
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import String, cast, select
-from sqlalchemy.exc import IntegrityError, StatementError
+from sqlalchemy.exc import IntegrityError, StatementError, DataError
+from psycopg.errors import StringDataRightTruncation
 
 from catalogo.database import SessionT
 from catalogo.model import Person
@@ -37,9 +38,18 @@ def create(person: Person, session: SessionT):
             status_code=HTTPStatus.BAD_REQUEST,
             detail='Database integrity error'
         )
-    except StatementError:
+
+    except DataError:
         session.rollback()
 
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST, detail=f'Statement Error'
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Field too long'
+        )
+
+    except StatementError as e:
+        session.rollback()
+
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail=f'Statement Error {e}'
         )

@@ -74,5 +74,5 @@ def test_create_person_fail_nick_exceed_32_characters(client: TestClient):
     data = response.json()
     data.pop('id', None)
 
-    assert data == {'detail': 'Database integrity error'}
+    assert data == {'detail': 'Field too long'}
     assert response.status_code == HTTPStatus.BAD_REQUEST
