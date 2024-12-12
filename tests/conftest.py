@@ -1,15 +1,14 @@
-import pytest
 import factory
+import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
-from sqlalchemy.engine import create_engine
 from sqlmodel import Session, SQLModel, create_engine
 from testcontainers.postgres import PostgresContainer
 
 from catalogo.app import app
-from catalogo.database import get_session, database_url
+from catalogo.database import get_session
 from catalogo.model import Person
 from tests.factories import FactoryPerson
+
 
 @pytest.fixture(scope='session')
 def engine():
@@ -17,6 +16,7 @@ def engine():
         _engine = create_engine(postgres.get_connection_url())
         with _engine.begin():
             yield _engine
+
 
 @pytest.fixture(scope='session')
 def session(engine):
@@ -44,4 +44,10 @@ def client(session):
 def configure_factories(session):
     factories = factory.alchemy.SQLAlchemyModelFactory.__subclasses__()
     for fac in factories:
-        fac._meta.sqlalchemy_session = session # type: ignore
+        fac._meta.sqlalchemy_session = session  # type: ignore
+
+
+@pytest.fixture(name='person')
+def person() -> Person:
+    person = FactoryPerson.create()
+    return person

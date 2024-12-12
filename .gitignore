@@ -8,3 +8,4 @@ wheels/
 *.sqlite3
 # Virtual environments
 .venv
+.vscode

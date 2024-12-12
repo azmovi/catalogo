@@ -1,10 +1,9 @@
 # Catalogo
 
 ### O que falta fazer
-- [ ] Terminar os testes do post
-- [ ] Criar as migrations e o entrypoint do alembic para o docker
-- [ ] Finalizar os endpoints
-- [ ] Finalizar os testes dos novos endpoints
+- [x] Terminar os testes do post
+- [x] Finalizar os endpoints
+- [x] Finalizar os testes dos novos endpoints
 - [ ] Começar os testes bdd
 
 - Api simples para verificar o catalogo de pessoas
