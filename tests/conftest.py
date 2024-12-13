@@ -1,6 +1,9 @@
+from typing import Generator
+
 import factory
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 from testcontainers.postgres import PostgresContainer
 
@@ -11,7 +14,7 @@ from tests.factories import FactoryPerson
 
 
 @pytest.fixture(scope='session')
-def engine():
+def engine() -> Generator[Engine]:
     with PostgresContainer('postgres:latest', driver='psycopg') as postgres:
         _engine = create_engine(postgres.get_connection_url())
         with _engine.begin():
@@ -19,7 +22,7 @@ def engine():
 
 
 @pytest.fixture(scope='session')
-def session(engine):
+def session(engine) -> Generator[Session]:
     SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:
@@ -29,7 +32,7 @@ def session(engine):
 
 
 @pytest.fixture(name='client')
-def client(session):
+def client(session) -> Generator[TestClient]:
     def get_session_override():
         return session
 
@@ -41,7 +44,7 @@ def client(session):
 
 
 @pytest.fixture(autouse=True)
-def configure_factories(session):
+def configure_factories(session) -> None:
     factories = factory.alchemy.SQLAlchemyModelFactory.__subclasses__()
     for fac in factories:
         fac._meta.sqlalchemy_session = session  # type: ignore
